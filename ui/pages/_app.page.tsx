@@ -1,13 +1,3 @@
-// import '../styles/globals.css'
-// import type { AppProps } from 'next/app'
-
-// import './reactCOIServiceWorker';
-
-// export default function App({ Component, pageProps }: AppProps) {
-//   return <Component {...pageProps} />
-// }
-
-
 import '../styles/globals.css'
 import { useEffect, useState } from "react";
 import './reactCOIServiceWorker';
@@ -166,12 +156,13 @@ export default function App() {
   if (state.hasWallet != null && !state.hasWallet) {
     const auroLink = 'https://www.aurowallet.com/';
     const auroLinkElem = <a href={auroLink} target="_blank" rel="noreferrer"> [Link] </a>
-    hasWallet = <div> Could not find a wallet. Install Auro wallet here: {auroLinkElem}</div>
+    hasWallet = <div className='store'> Could not find a wallet. Install Auro wallet here: {auroLinkElem}</div>
   }
 
-  let setupText = state.hasBeenSetup ? 'SnarkyJS Ready' : 'Setting up SnarkyJS...';
-  let setup = <div> {setupText} {hasWallet}</div>
+  let setupText = state.hasBeenSetup ? 'Connected' : 'Connecting';
+  let setup = <div className='store'> {setupText} {hasWallet}</div> 
 
+        
   let accountDoesNotExist;
   if (state.hasBeenSetup && !state.accountExists) {
     const faucetLink = "https://faucet.minaprotocol.com/?address=" + state.publicKey!.toBase58();
@@ -184,15 +175,26 @@ export default function App() {
   let mainContent;
   if (state.hasBeenSetup && state.accountExists) {
     mainContent = <div>
-      <button onClick={onSendTransaction} disabled={state.creatingTransaction}> Send Transaction </button>
-      <div> Current Number in zkApp: {state.currentNum!.toString()} </div>
-      <button onClick={onRefreshCurrentNum}> Get Latest State </button>
+          <div className="storage-detail-heading"> Current Number in zkApp: {state.currentNum!.toString()} </div>
+          <button onClick={onSendTransaction} disabled={state.creatingTransaction}> Send Transaction </button>
+          <button onClick={onRefreshCurrentNum}> Get Latest State </button>
     </div>
   }
 
+
   return <div>
-    {setup}
-    {accountDoesNotExist}
-    {mainContent}
+    <title>ZkApp</title>
+      <div className="main">
+        <section className="storage-section">
+          <section className="section-header">
+            <h1>ZkDapp</h1>
+          </section>
+          <form className="mt-5" >
+              {setup}
+              {accountDoesNotExist}
+              {mainContent}
+          </form>
+        </section>
+      </div>
   </div>
 }
